@@ -7,7 +7,7 @@
 
 # testing
 /coverage
-
+${APPDATA}npm
 # next.js
 /.next/
 /out/

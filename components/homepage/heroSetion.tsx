@@ -5,8 +5,6 @@ import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { TextEffect } from '@/components/motion-primitives/text-effect'
 import { AnimatedGroup } from '@/components/motion-primitives/animated-group'
-import appImg from '@/app/app.png'
-
 
 const transitionVariants = {
     item: {
@@ -42,40 +40,6 @@ export default function HeroSection() {
                 </div>
                 <section>
                     <div className="relative pt-24 md:pt-36">
-                        {/* <AnimatedGroup
-                            variants={{
-                                container: {
-                                    visible: {
-                                        transition: {
-                                            delayChildren: 1,
-                                        },
-                                    },
-                                },
-                                item: {
-                                    hidden: {
-                                        opacity: 0,
-                                        y: 20,
-                                    },
-                                    visible: {
-                                        opacity: 1,
-                                        y: 0,
-                                        transition: {
-                                            type: 'spring',
-                                            bounce: 0.3,
-                                            duration: 2,
-                                        },
-                                    },
-                                },
-                            }}
-                            className="absolute inset-0 -z-20">
-                            <Image
-                                src="https://ik.imagekit.io/lrigu76hy/tailark/night-background.jpg?updatedAt=1745733451120"
-                                alt="background"
-                                className="absolute inset-x-0 top-56 -z-20 hidden lg:top-32 dark:block"
-                                width="3276"
-                                height="4095"
-                            />
-                        </AnimatedGroup> */}
                         <div className="absolute inset-0 -z-10 size-full [background:radial-gradient(125%_125%_at_50%_100%,transparent_0%,var(--color-background)_75%)]"></div>
                         <div className="mx-auto max-w-7xl px-6">
                             <div className="text-center sm:mx-auto lg:mr-auto lg:mt-0">
@@ -129,16 +93,24 @@ export default function HeroSection() {
                                         ...transitionVariants,
                                     }}
                                     className="mt-12 flex flex-col items-center justify-center gap-2 md:flex-row">
+                                    <div
+                                        key={1}
+                                        className="bg-foreground/10 rounded-[calc(var(--radius-xl)+0.125rem)] border p-0.5">
                                         <Button
-                                            asChild>
+                                            asChild
+                                            size="lg"
+                                            className="rounded-xl px-5 text-base">
                                             <Link href="#link">
                                                 <span className="text-nowrap">Start Building</span>
                                             </Link>
                                         </Button>
+                                    </div>
                                     <Button
+                                        key={2}
                                         asChild
+                                        size="lg"
                                         variant="ghost"
-                                        >
+                                        className="h-10.5 rounded-xl px-5">
                                         <Link href="#link">
                                             <span className="text-nowrap">Request a demo</span>
                                         </Link>
@@ -164,17 +136,17 @@ export default function HeroSection() {
                                     aria-hidden
                                     className="bg-linear-to-b to-background absolute inset-0 z-10 from-transparent from-35%"
                                 />
-                                <div className="inset-shadow-2xs ring-background dark:inset-shadow-white/20 bg-background relative mx-auto max-w-6xl overflow-hidden rounded-2xl border p-1 shadow-lg shadow-zinc-950/15 ring-1">
+                                <div className="inset-shadow-2xs ring-background dark:inset-shadow-white/20 bg-background relative mx-auto max-w-6xl overflow-hidden rounded-2xl border p-4 shadow-lg shadow-zinc-950/15 ring-1">
                                     <Image
                                         className="bg-background aspect-15/8 relative hidden rounded-2xl dark:block"
-                                        src={appImg}
+                                        src="/mail2.png"
                                         alt="app screen"
                                         width="2700"
                                         height="1440"
                                     />
                                     <Image
                                         className="z-2 border-border/25 aspect-15/8 relative rounded-2xl border dark:hidden"
-                                        src={appImg}
+                                        src="/mail2-light.png"
                                         alt="app screen"
                                         width="2700"
                                         height="1440"
@@ -184,7 +156,7 @@ export default function HeroSection() {
                         </AnimatedGroup>
                     </div>
                 </section>
-                {/* <section className="bg-background pb-16 pt-16 md:pb-32">
+                <section className="bg-background pb-16 pt-16 md:pb-32">
                     <div className="group relative m-auto max-w-5xl px-6">
                         <div className="absolute inset-0 z-10 flex scale-95 items-center justify-center opacity-0 duration-500 group-hover:scale-100 group-hover:opacity-100">
                             <Link
@@ -272,7 +244,7 @@ export default function HeroSection() {
                             </div>
                         </div>
                     </div>
-                </section> */}
+                </section>
             </main>
         </>
     )
