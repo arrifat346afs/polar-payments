@@ -10,7 +10,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Activity, Code, Star, TrendingUp, Users, Zap } from "lucide-react";
 import Link from "next/link";
-
+export const runtime = "edge";
 export default async function Dashboard() {
   return (
     <div className="flex flex-col gap-6 p-6">

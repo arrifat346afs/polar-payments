@@ -1,3 +1,5 @@
+export const runtime = "edge";
+
 export function NameTransition() {
   return (
     <h1 className="font-medium pt-12 transition-element">
