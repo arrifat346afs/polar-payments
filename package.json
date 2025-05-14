@@ -10,8 +10,8 @@
     "build:worker":"cloudflare",
     "dev:worker":"wrangler dev --port 8787",
     "pages:build": "npx @cloudflare/next-on-pages",
-    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "preview": "next build && wrangler pages dev .vercel/output/static",
+    "deploy": "next build && npx @cloudflare/next-on-pages && wrangler deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {
