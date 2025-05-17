@@ -4,6 +4,8 @@ import { ViewTransitions } from "next-view-transitions";
 import { Analytics } from "@vercel/analytics/react";
 import NavBar from "@/components/wrapper/navbar";
 
+export const runtime = "edge";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

@@ -1,4 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
+
+export const runtime = "edge";
 
 // Define types
 interface ModelUsageData {
@@ -14,9 +16,9 @@ let modelUsageCache: ModelUsageData[] = [];
 // Helper function to add CORS headers
 function corsHeaders() {
   return {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
   };
 }
 
@@ -35,29 +37,29 @@ export async function GET(request: NextRequest) {
   try {
     // Filter out data older than a month
     const oneMonthAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
-    modelUsageCache = modelUsageCache.filter(item =>
-      (item.timestamp || 0) > oneMonthAgo
+    modelUsageCache = modelUsageCache.filter(
+      (item) => (item.timestamp || 0) > oneMonthAgo
     );
 
     return NextResponse.json(
       {
         success: true,
-        data: modelUsageCache
+        data: modelUsageCache,
       },
       {
-        headers: corsHeaders()
+        headers: corsHeaders(),
       }
     );
   } catch (error) {
-    console.error('Error retrieving model usage data:', error);
+    console.error("Error retrieving model usage data:", error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to retrieve model usage data'
+        error: "Failed to retrieve model usage data",
       },
       {
         status: 500,
-        headers: corsHeaders()
+        headers: corsHeaders(),
       }
     );
   }
@@ -71,16 +73,20 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Validate request body
-    if (!body.modelName || typeof body.modelName !== 'string') {
+    if (!body.modelName || typeof body.modelName !== "string") {
       return NextResponse.json(
-        { success: false, error: 'Invalid model name' },
+        { success: false, error: "Invalid model name" },
         { status: 400, headers: corsHeaders() }
       );
     }
 
-    if (!body.imageCount || typeof body.imageCount !== 'number' || body.imageCount <= 0) {
+    if (
+      !body.imageCount ||
+      typeof body.imageCount !== "number" ||
+      body.imageCount <= 0
+    ) {
       return NextResponse.json(
-        { success: false, error: 'Invalid image count' },
+        { success: false, error: "Invalid image count" },
         { status: 400, headers: corsHeaders() }
       );
     }
@@ -89,7 +95,7 @@ export async function POST(request: NextRequest) {
     const newEntry: ModelUsageData = {
       modelName: body.modelName,
       imageCount: body.imageCount,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
 
     // Add to cache
@@ -97,29 +103,29 @@ export async function POST(request: NextRequest) {
 
     // Filter out data older than a month
     const oneMonthAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
-    modelUsageCache = modelUsageCache.filter(item =>
-      (item.timestamp || 0) > oneMonthAgo
+    modelUsageCache = modelUsageCache.filter(
+      (item) => (item.timestamp || 0) > oneMonthAgo
     );
 
     return NextResponse.json(
       {
         success: true,
-        data: newEntry
+        data: newEntry,
       },
       {
-        headers: corsHeaders()
+        headers: corsHeaders(),
       }
     );
   } catch (error) {
-    console.error('Error adding model usage data:', error);
+    console.error("Error adding model usage data:", error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to add model usage data'
+        error: "Failed to add model usage data",
       },
       {
         status: 500,
-        headers: corsHeaders()
+        headers: corsHeaders(),
       }
     );
   }
@@ -135,22 +141,22 @@ export async function DELETE() {
     return NextResponse.json(
       {
         success: true,
-        message: 'All model usage data cleared'
+        message: "All model usage data cleared",
       },
       {
-        headers: corsHeaders()
+        headers: corsHeaders(),
       }
     );
   } catch (error) {
-    console.error('Error clearing model usage data:', error);
+    console.error("Error clearing model usage data:", error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to clear model usage data'
+        error: "Failed to clear model usage data",
       },
       {
         status: 500,
-        headers: corsHeaders()
+        headers: corsHeaders(),
       }
     );
   }

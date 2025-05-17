@@ -2,6 +2,8 @@ import { ReactNode } from "react";
 import DashboardSideBar from "./_components/dashboard-side-bar";
 import DashboardTopNav from "./_components/dashbord-top-nav";
 
+export const runtime = "edge";
+
 export default async function DashboardLayout({
   children,
 }: {

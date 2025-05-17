@@ -1,12 +1,14 @@
-import { MetadataRoute } from 'next'
+import { MetadataRoute } from "next";
+
+export const runtime = "edge";
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: '/dashboard/',
+      userAgent: "*",
+      allow: "/",
+      disallow: "/dashboard/",
     },
-    sitemap: 'https://nextstarter.xyz/sitemap.xml',
-  }
+    sitemap: "https://nextstarter.xyz/sitemap.xml",
+  };
 }

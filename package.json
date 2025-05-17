@@ -11,7 +11,11 @@
     "format:fix": "prettier --write --list-different .",
     "lint": "next lint",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "pages:build": "npx @cloudflare/next-on-pages",
+    "pages:dev": "wrangler pages dev .vercel/output/static",
+    "pages:deploy": "npm run pages:build && wrangler pages deploy .vercel/output/static",
+    "pages:preview": "npm run pages:build && wrangler pages dev .vercel/output/static"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.1.2",
@@ -102,6 +106,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.13.12",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
@@ -109,6 +114,7 @@
     "drizzle-kit": "^0.18.1",
     "eslint": "latest",
     "eslint-config-next": "latest",
+    "eslint-plugin-next-on-pages": "^1.13.12",
     "postcss": "latest",
     "tailwindcss": "^3.3.5",
     "typescript": "latest",

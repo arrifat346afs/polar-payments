@@ -1,3 +1,5 @@
+export const runtime = "edge";
+
 type SitemapEntry = {
   url: string;
   lastModified: string;
