@@ -16,7 +16,8 @@
     "pages:dev": "wrangler pages dev .vercel/output/static",
     "pages:deploy": "npm run pages:build && wrangler pages deploy .vercel/output/static",
     "pages:preview": "npm run pages:build && wrangler pages dev .vercel/output/static",
-    "local:build": "next build"
+    "local:build": "next build",
+    "cloudflare:build": "node cloudflare-build.js"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.1.2",
@@ -88,9 +89,9 @@
     "next": "latest",
     "next-themes": "^0.3.0",
     "next-view-transitions": "^0.3.4",
-    "react": "latest",
+    "react": "^18.2.0",
     "react-day-picker": "^8.10.1",
-    "react-dom": "latest",
+    "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.3",
     "react-icons": "^4.11.0",
     "react-markdown": "^9.0.3",
