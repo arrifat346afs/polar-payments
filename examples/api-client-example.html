@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Client Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .code-block {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button.red {
+            background-color: #f44336;
+        }
+        button.red:hover {
+            background-color: #d32f2f;
+        }
+        button.blue {
+            background-color: #2196F3;
+        }
+        button.blue:hover {
+            background-color: #0b7dda;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            background-color: #e8f5e9;
+            border-left: 4px solid #4CAF50;
+        }
+        .status.error {
+            background-color: #ffebee;
+            border-left: 4px solid #f44336;
+        }
+        .model-presets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        .model-preset {
+            padding: 5px 10px;
+            background-color: #e0e0e0;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .model-preset:hover {
+            background-color: #bdbdbd;
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            margin-bottom: -1px;
+        }
+        .tab.active {
+            border-color: #ccc;
+            border-bottom-color: white;
+            background-color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <h1>API Client Example</h1>
+
+    <div class="status" id="statusMessage">
+        This example demonstrates how to use the API to send AI model usage data from your desktop application.
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('sendData')">Send Data</div>
+        <div class="tab" onclick="switchTab('viewData')">View Data</div>
+        <div class="tab" onclick="switchTab('codeExamples')">Code Examples</div>
+    </div>
+
+    <div id="sendData" class="tab-content active">
+        <h2>Send Data to API</h2>
+
+        <div class="form-group">
+            <label for="apiUrl">API URL:</label>
+            <input type="text" id="apiUrl" value="http://localhost:3000/api/model-usage">
+            <div class="text-xs mt-1">Make sure this matches your development server URL</div>
+        </div>
+
+        <div class="form-group">
+            <label for="modelName">Model Name:</label>
+            <div class="model-presets">
+                <span class="model-preset" onclick="setModelName('Stable Diffusion')">Stable Diffusion</span>
+                <span class="model-preset" onclick="setModelName('DALL-E')">DALL-E</span>
+                <span class="model-preset" onclick="setModelName('Midjourney')">Midjourney</span>
+                <span class="model-preset" onclick="setModelName('Imagen')">Imagen</span>
+                <span class="model-preset" onclick="setModelName('Firefly')">Firefly</span>
+            </div>
+            <input type="text" id="modelName" value="Stable Diffusion">
+        </div>
+
+        <div class="form-group">
+            <label for="imageCount">Image Count:</label>
+            <input type="number" id="imageCount" value="25" min="1" max="1000">
+        </div>
+
+        <div class="form-group">
+            <button onclick="sendDataToApi()">Send Data to API</button>
+            <button class="blue" onclick="sendRandomData()">Send Random Data</button>
+            <button class="red" onclick="clearAllData()">Clear All Data</button>
+        </div>
+    </div>
+
+    <div id="viewData" class="tab-content">
+        <h2>Current API Data</h2>
+        <button onclick="fetchData()">Refresh Data</button>
+        <div id="dataDisplay" class="code-block mt-4"></div>
+    </div>
+
+    <div id="codeExamples" class="tab-content">
+        <h2>Code Examples for API Integration</h2>
+
+        <h3>JavaScript Example</h3>
+        <pre class="code-block">
+// Send data to the API
+async function sendModelData(modelName, imageCount) {
+  try {
+    const response = await fetch('/api/model-usage', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        modelName,
+        imageCount
+      })
+    });
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error(result.error || 'Failed to add model data');
+    }
+
+    console.log('Data sent successfully:', result);
+    return result;
+  } catch (error) {
+    console.error('Error sending model data:', error);
+    throw error;
+  }
+}
+
+// Example usage
+sendModelData('Stable Diffusion', 25)
+  .then(result => console.log('Success:', result))
+  .catch(error => console.error('Error:', error));
+        </pre>
+
+        <h3>Python Example</h3>
+        <pre class="code-block">
+import requests
+import json
+
+def send_model_data(model_name, image_count):
+    """Send model usage data to the API."""
+    try:
+        url = 'http://localhost:3000/api/model-usage'  # Use your development server URL
+        payload = {
+            'modelName': model_name,
+            'imageCount': image_count
+        }
+
+        response = requests.post(
+            url,
+            data=json.dumps(payload),
+            headers={'Content-Type': 'application/json'}
+        )
+
+        result = response.json()
+
+        if not result.get('success'):
+            raise Exception(result.get('error', 'Failed to add model data'))
+
+        print('Data sent successfully:', result)
+        return result
+    except Exception as e:
+        print('Error sending model data:', str(e))
+        raise
+
+# Example usage
+try:
+    send_model_data('Stable Diffusion', 25)
+except Exception as e:
+    print('Failed:', str(e))
+        </pre>
+    </div>
+
+    <script>
+        // Switch between tabs
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Deactivate all tab buttons
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+
+            // Activate selected tab button
+            Array.from(document.querySelectorAll('.tab')).find(tab =>
+                tab.textContent.toLowerCase().includes(tabId.toLowerCase())
+            ).classList.add('active');
+
+            // If viewing data tab, fetch the data
+            if (tabId === 'viewData') {
+                fetchData();
+            }
+        }
+
+        // Set model name from preset
+        function setModelName(name) {
+            document.getElementById('modelName').value = name;
+        }
+
+        // Send data to API
+        async function sendDataToApi() {
+            const apiUrl = document.getElementById('apiUrl').value;
+            const modelName = document.getElementById('modelName').value;
+            const imageCount = parseInt(document.getElementById('imageCount').value);
+
+            if (!modelName) {
+                showStatus('Please enter a model name', true);
+                return;
+            }
+
+            if (isNaN(imageCount) || imageCount <= 0) {
+                showStatus('Please enter a valid image count', true);
+                return;
+            }
+
+            try {
+                console.log(`Sending data to ${apiUrl}:`, { modelName, imageCount });
+                showStatus(`Sending data to API...`);
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        modelName,
+                        imageCount
+                    }),
+                    // Include credentials for cookies if needed
+                    credentials: 'include',
+                    // Allow cross-origin requests
+                    mode: 'cors'
+                });
+
+                console.log('Response status:', response.status);
+
+                if (!response.ok) {
+                    throw new Error(`API request failed with status ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('API response:', result);
+
+                if (!result.success) {
+                    throw new Error(result.error || 'Failed to add model data');
+                }
+
+                showStatus(`Data sent successfully: ${modelName}, ${imageCount} images`);
+
+                // If we're on the view data tab, refresh the display
+                if (document.getElementById('viewData').classList.contains('active')) {
+                    fetchData();
+                }
+            } catch (error) {
+                console.error('Error sending data:', error);
+                showStatus(`Error: ${error.message}`, true);
+            }
+        }
+
+        // Send random data
+        function sendRandomData() {
+            const models = ['Stable Diffusion', 'DALL-E', 'Midjourney', 'Imagen', 'Firefly'];
+            const randomModel = models[Math.floor(Math.random() * models.length)];
+            const randomCount = Math.floor(Math.random() * 50) + 1;
+
+            document.getElementById('modelName').value = randomModel;
+            document.getElementById('imageCount').value = randomCount;
+
+            sendDataToApi();
+        }
+
+        // Fetch data from API
+        async function fetchData() {
+            const apiUrl = document.getElementById('apiUrl').value;
+            const dataDisplay = document.getElementById('dataDisplay');
+
+            try {
+                dataDisplay.textContent = 'Loading...';
+                console.log(`Fetching data from ${apiUrl}`);
+
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    // Include credentials for cookies if needed
+                    credentials: 'include',
+                    // Allow cross-origin requests
+                    mode: 'cors'
+                });
+
+                console.log('Response status:', response.status);
+
+                if (!response.ok) {
+                    throw new Error(`API request failed with status ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('API response:', result);
+
+                if (!result.success) {
+                    throw new Error(result.error || 'Failed to fetch data');
+                }
+
+                if (!result.data || result.data.length === 0) {
+                    dataDisplay.textContent = 'No data available.';
+                    return;
+                }
+
+                // Format the data with dates
+                const formattedData = result.data.map(item => ({
+                    ...item,
+                    date: new Date(item.timestamp).toLocaleString()
+                }));
+
+                dataDisplay.textContent = JSON.stringify(formattedData, null, 2);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                dataDisplay.textContent = `Error: ${error.message}`;
+                showStatus(`Error fetching data: ${error.message}`, true);
+            }
+        }
+
+        // Clear all data
+        async function clearAllData() {
+            const apiUrl = document.getElementById('apiUrl').value;
+
+            try {
+                console.log(`Clearing data from ${apiUrl}`);
+                showStatus('Clearing data...');
+
+                const response = await fetch(apiUrl, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    // Include credentials for cookies if needed
+                    credentials: 'include',
+                    // Allow cross-origin requests
+                    mode: 'cors'
+                });
+
+                console.log('Response status:', response.status);
+
+                if (!response.ok) {
+                    throw new Error(`API request failed with status ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('API response:', result);
+
+                if (!result.success) {
+                    throw new Error(result.error || 'Failed to clear data');
+                }
+
+                showStatus('All data cleared successfully');
+
+                // If we're on the view data tab, refresh the display
+                if (document.getElementById('viewData').classList.contains('active')) {
+                    fetchData();
+                }
+            } catch (error) {
+                console.error('Error clearing data:', error);
+                showStatus(`Error clearing data: ${error.message}`, true);
+            }
+        }
+
+        // Show status message
+        function showStatus(message, isError = false) {
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.textContent = message;
+            statusMessage.className = isError ? 'status error' : 'status';
+
+            // Scroll to top to make sure message is visible
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>

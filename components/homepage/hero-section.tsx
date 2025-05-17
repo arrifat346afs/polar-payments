@@ -6,6 +6,7 @@ import { AnimatedGroup } from "../motion-primitives/animated-group";
 import { TextEffect } from "../motion-primitives/text-effect";
 import appImg from "@/app/app.png";
 import Image from "next/image";
+import { BackgroundBeams } from "../ui/background-beams";
 
 const transitionVariants = {
   item: {
@@ -22,6 +23,7 @@ const transitionVariants = {
 export default function HeroSection() {
   return (
     <main className="overflow-hidden">
+      <BackgroundBeams />
       <div
         aria-hidden
         className="absolute inset-0 isolate hidden opacity-65 contain-strict lg:block"
@@ -99,6 +101,7 @@ export default function HeroSection() {
                   asChild
                   size="lg"
                   variant="ghost"
+                
                   
                 >
                   <Link href="#link">

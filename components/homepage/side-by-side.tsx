@@ -6,19 +6,19 @@ import { motion } from "motion/react"
 
 const features = [
   {
-    name: 'Build faster',
+    name: '🔖 Generate metadata instantly',
     description:
-      'Get up and running in no time with pre-configured settings and best practices. Say goodbye to setup and focus on what truly matters - building your application.',
+      'Upload your image or video and let our AI do the heavy lifting. Say goodbye to repetitive typing and research.',
     icon: Computer,
   },
   {
-    name: 'Focus on business logic',
-    description: 'Concentrate on solving business problems instead of dealing with the repetitive setup.',
+    name: '🧠 Optimized for stock platforms',
+    description: 'Our tool understands the unique requirements of leading stock agencies, helping improve discoverability and approval rates.',
     icon: FaBusinessTime,
   },
   {
-    name: 'Ready for scale',
-    description: 'Prepare for growth from day one. With built-in optimizations and scalable architecture, your application will be ready to handle increased traffic and complexity.',
+    name: '📈 Scale your submissions',
+    description: 'Whether you are an individual contributor or an agency, TagPix Ai helps you publish more content in less time with consistent, professional metadata.',
     icon: Network,
   },
 ]
@@ -45,10 +45,10 @@ export default function SideBySide() {
               </div>
 
               <h2 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-blue-800 to-gray-900 dark:from-white dark:via-blue-300 dark:to-white pb-2">
-                A Faster Path to Production
+                Smart Metadata for Stock Creators
               </h2>
               <p className="mt-6 text-lg text-gray-600 dark:text-gray-300">
-                Accelerate your development with our powerful Next.js starter kit. Focus on building features, not infrastructure.
+              Accelerate your stock submission workflow with AI-powered automation. TagPix Ai instantly generates high-quality titles, keywords, and descriptions optimized for platforms like Adobe Stock and Shutterstock — so you can focus on creating, not tagging.
               </p>
               <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
                 {features.map((feature, index) => (

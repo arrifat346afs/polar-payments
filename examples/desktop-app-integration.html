@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desktop App Integration Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #7a7a7a;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .code-block {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button.red {
+            background-color: #f44336;
+        }
+        button.red:hover {
+            background-color: #d32f2f;
+        }
+        button.blue {
+            background-color: #2196F3;
+        }
+        button.blue:hover {
+            background-color: #0b7dda;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            background-color: #e8f5e9;
+            border-left: 4px solid #4CAF50;
+        }
+        .status.error {
+            background-color: #ffebee;
+            border-left: 4px solid #f44336;
+        }
+        .model-presets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        .model-preset {
+            padding: 5px 10px;
+            background-color: #e0e0e0;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .model-preset:hover {
+            background-color: #bdbdbd;
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            margin-bottom: -1px;
+        }
+        .tab.active {
+            border-color: #ccc;
+            border-bottom-color: white;
+            background-color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Desktop App Integration Example</h1>
+
+    <div class="status" id="statusMessage">
+        This example demonstrates how to send AI model usage data from your desktop application to the web application.
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('sendData')">Send Data</div>
+        <div class="tab" onclick="switchTab('viewData')">View Data</div>
+        <div class="tab" onclick="switchTab('codeExamples')">Code Examples</div>
+    </div>
+
+    <div id="sendData" class="tab-content active">
+        <h2>Send Data to Chart</h2>
+
+        <div class="form-group">
+            <label for="modelName">Model Name:</label>
+            <div class="model-presets">
+                <span class="model-preset" onclick="setModelName('Stable Diffusion')">Stable Diffusion</span>
+                <span class="model-preset" onclick="setModelName('DALL-E')">DALL-E</span>
+                <span class="model-preset" onclick="setModelName('Midjourney')">Midjourney</span>
+                <span class="model-preset" onclick="setModelName('Imagen')">Imagen</span>
+                <span class="model-preset" onclick="setModelName('Firefly')">Firefly</span>
+            </div>
+            <input type="text" id="modelName" value="Stable Diffusion">
+        </div>
+
+        <div class="form-group">
+            <label for="imageCount">Image Count:</label>
+            <input type="number" id="imageCount" value="25" min="1" max="1000">
+        </div>
+
+        <div class="form-group">
+            <button onclick="sendDataViaFunction()">Send Data via Window Function</button>
+            <button onclick="sendDataViaPostMessage()">Send Data via PostMessage</button>
+        </div>
+
+        <div class="form-group">
+            <button class="blue" onclick="sendRandomData()">Send Random Data</button>
+            <button class="red" onclick="clearStoredData()">Clear All Data</button>
+        </div>
+    </div>
+
+    <div id="viewData" class="tab-content">
+        <h2>Current Stored Data</h2>
+        <button onclick="refreshStoredData()">Refresh Data View</button>
+        <div id="dataDisplay" style="margin-top: 20px; white-space: pre; background-color: #f5f5f5; padding: 10px;"></div>
+    </div>
+
+    <div id="codeExamples" class="tab-content">
+        <h2>Code Examples for Integration</h2>
+
+        <h3>Method 1: Using the Window Function</h3>
+        <pre class="code-block">
+// In your desktop application (using a WebView or similar)
+// Assuming your web app is loaded in a WebView
+
+// JavaScript to execute in the WebView context
+const jsCode = `
+  if (window.addAIModelData) {
+    window.addAIModelData('${modelName}', ${imageCount});
+  }
+`;
+
+// Execute this JavaScript in your WebView
+webView.executeJavaScript(jsCode);
+        </pre>
+
+        <h3>Method 2: Using PostMessage</h3>
+        <pre class="code-block">
+// In your desktop application (using a WebView or similar)
+// Assuming your web app is loaded in a WebView
+
+// JavaScript to execute in the WebView context
+const jsCode = `
+  window.postMessage({
+    type: 'ai-model-data',
+    modelName: '${modelName}',
+    imageCount: ${imageCount}
+  }, '*');
+`;
+
+// Execute this JavaScript in your WebView
+webView.executeJavaScript(jsCode);
+        </pre>
+    </div>
+
+    <script>
+        const LOCAL_STORAGE_KEY = "ai-model-usage-data";
+        const statusMessage = document.getElementById('statusMessage');
+
+        // Switch between tabs
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Deactivate all tab buttons
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+
+            // Activate selected tab button
+            Array.from(document.querySelectorAll('.tab')).find(tab =>
+                tab.textContent.toLowerCase().includes(tabId.toLowerCase())
+            ).classList.add('active');
+
+            // If viewing data tab, refresh the data
+            if (tabId === 'viewData') {
+                refreshStoredData();
+            }
+        }
+
+        // Set model name from preset
+        function setModelName(name) {
+            document.getElementById('modelName').value = name;
+        }
+
+        // Function to send data via the window function
+        function sendDataViaFunction() {
+            const modelName = document.getElementById('modelName').value;
+            const imageCount = parseInt(document.getElementById('imageCount').value);
+
+            if (!modelName) {
+                showStatus('Please enter a model name', true);
+                return;
+            }
+
+            if (isNaN(imageCount) || imageCount <= 0) {
+                showStatus('Please enter a valid image count', true);
+                return;
+            }
+
+            try {
+                if (window.opener && window.opener.addAIModelData) {
+                    window.opener.addAIModelData(modelName, imageCount);
+                    showStatus(`Data sent to parent window: ${modelName}, ${imageCount} images`);
+                } else {
+                    showStatus('Parent window not available. Storing data locally instead.', true);
+                    simulateDataStorage(modelName, imageCount);
+                }
+            } catch (error) {
+                showStatus(`Error: ${error.message}`, true);
+            }
+        }
+
+        // Function to send data via postMessage
+        function sendDataViaPostMessage() {
+            const modelName = document.getElementById('modelName').value;
+            const imageCount = parseInt(document.getElementById('imageCount').value);
+
+            if (!modelName) {
+                showStatus('Please enter a model name', true);
+                return;
+            }
+
+            if (isNaN(imageCount) || imageCount <= 0) {
+                showStatus('Please enter a valid image count', true);
+                return;
+            }
+
+            try {
+                if (window.opener) {
+                    window.opener.postMessage({
+                        type: 'ai-model-data',
+                        modelName: modelName,
+                        imageCount: imageCount
+                    }, '*');
+                    showStatus(`Message posted to parent window: ${modelName}, ${imageCount} images`);
+                } else {
+                    showStatus('Parent window not available. Storing data locally instead.', true);
+                    simulateDataStorage(modelName, imageCount);
+                }
+            } catch (error) {
+                showStatus(`Error: ${error.message}`, true);
+            }
+        }
+
+        // Send random data
+        function sendRandomData() {
+            const models = ['Stable Diffusion', 'DALL-E', 'Midjourney', 'Imagen', 'Firefly'];
+            const randomModel = models[Math.floor(Math.random() * models.length)];
+            const randomCount = Math.floor(Math.random() * 50) + 1;
+
+            document.getElementById('modelName').value = randomModel;
+            document.getElementById('imageCount').value = randomCount;
+
+            // Use function method by default
+            sendDataViaFunction();
+        }
+
+        // Simulate data storage for demonstration
+        function simulateDataStorage(modelName, imageCount) {
+            try {
+                const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+                const modelMetrics = storedData ? JSON.parse(storedData) : [];
+
+                modelMetrics.push({
+                    modelName: modelName,
+                    imageCount: imageCount,
+                    timestamp: Date.now()
+                });
+
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(modelMetrics));
+                showStatus(`Data stored locally: ${modelName}, ${imageCount} images`);
+
+                // If we're on the view data tab, refresh the display
+                if (document.getElementById('viewData').classList.contains('active')) {
+                    refreshStoredData();
+                }
+            } catch (error) {
+                showStatus(`Error storing data: ${error.message}`, true);
+            }
+        }
+
+        // View stored data
+        function refreshStoredData() {
+            const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+            const dataDisplay = document.getElementById('dataDisplay');
+
+            if (storedData) {
+                try {
+                    const modelMetrics = JSON.parse(storedData);
+
+                    if (modelMetrics.length === 0) {
+                        dataDisplay.textContent = "No data stored yet.";
+                    } else {
+                        // Format the data with dates
+                        const formattedData = modelMetrics.map(metric => ({
+                            ...metric,
+                            date: new Date(metric.timestamp).toLocaleString()
+                        }));
+
+                        dataDisplay.textContent = JSON.stringify(formattedData, null, 2);
+                    }
+                } catch (error) {
+                    dataDisplay.textContent = `Error parsing data: ${error.message}`;
+                }
+            } else {
+                dataDisplay.textContent = "No data stored yet.";
+            }
+        }
+
+        // Clear stored data
+        function clearStoredData() {
+            try {
+                localStorage.removeItem(LOCAL_STORAGE_KEY);
+                showStatus('All stored data has been cleared.');
+
+                // If we're on the view data tab, refresh the display
+                if (document.getElementById('viewData').classList.contains('active')) {
+                    refreshStoredData();
+                }
+
+                // Try to clear data in parent window if available
+                if (window.opener && window.opener.clearAIModelData) {
+                    window.opener.clearAIModelData();
+                }
+            } catch (error) {
+                showStatus(`Error clearing data: ${error.message}`, true);
+            }
+        }
+
+        // Show status message
+        function showStatus(message, isError = false) {
+            statusMessage.textContent = message;
+            statusMessage.className = isError ? 'status error' : 'status';
+
+            // Scroll to top to make sure message is visible
+            window.scrollTo(0, 0);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if we can communicate with parent window
+            if (window.opener && (window.opener.addAIModelData || window.opener.postMessage)) {
+                showStatus('Connected to parent window. Ready to send data.');
+            } else {
+                showStatus('No parent window detected. Data will be stored locally for demonstration.', true);
+            }
+        });
+    </script>
+</body>
+</html>
