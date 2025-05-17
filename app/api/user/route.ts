@@ -3,8 +3,6 @@ import { api } from "@/convex/_generated/api";
 import { fetchQuery } from "convex/nextjs";
 import { getAuthToken } from "@/lib/auth";
 
-export const runtime = "edge";
-
 export async function GET(_request: Request) {
   try {
     // Get the user ID from Clerk auth

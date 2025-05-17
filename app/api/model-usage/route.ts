@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export const runtime = "edge";
-
 // Define types
 interface ModelUsageData {
   modelName: string;
