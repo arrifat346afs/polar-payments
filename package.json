@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build",
+    "build": "npx @cloudflare/next-on-pages",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "dev": "next dev",
@@ -15,7 +15,8 @@
     "pages:build": "npx @cloudflare/next-on-pages",
     "pages:dev": "wrangler pages dev .vercel/output/static",
     "pages:deploy": "npm run pages:build && wrangler pages deploy .vercel/output/static",
-    "pages:preview": "npm run pages:build && wrangler pages dev .vercel/output/static"
+    "pages:preview": "npm run pages:build && wrangler pages dev .vercel/output/static",
+    "local:build": "next build"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.1.2",
@@ -118,6 +119,6 @@
     "postcss": "latest",
     "tailwindcss": "^3.3.5",
     "typescript": "latest",
-    "vercel": "^25.2.0"
+    "vercel": "^30.0.0"
   }
 }

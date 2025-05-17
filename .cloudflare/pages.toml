@@ -1,0 +1,15 @@
+[build]
+command = "npm run build"
+output_directory = ".vercel/output/static"
+build_directory = ".vercel/output/static"
+
+[build.environment]
+NODE_VERSION = "18"
+CLOUDFLARE = "true"
+
+[site]
+bucket = ".vercel/output/static"
+
+[env.production]
+CLOUDFLARE = "true"
+NODE_ENV = "production"
