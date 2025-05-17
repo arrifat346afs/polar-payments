@@ -8,9 +8,9 @@ import {
   XAxis,
   YAxis,
 } from "@/app/(pages)/dashboard/_components/chart";
-import { ChartTooltip } from "@/components/ui/chart";
+// import { ChartTooltip } from "@/components/ui/chart";
 import { Badge } from "@/components/ui/badge";
-import { format, isAfter, subMonths } from "date-fns";
+import { format } from "date-fns";
 import { useEffect, useState, useRef } from "react";
 
 // Define types for our data
